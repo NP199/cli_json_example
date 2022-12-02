@@ -6,15 +6,17 @@
 
 
 struct config{
+    //Eigener Konstruktor
     config(std::string loginName_temp, std::string host_temp, std::uint8_t id_temp)
     : loginName{loginName_temp}, host{host_temp}, id{id_temp}{
         std::cout << "new config constructed!\n";
     }
+    //Default Konstruktor
     config() = default;
     std::string loginName{"Name"};
     std::string host{"Host"};
     int id{};
-
+    //Nlohmann json mein config Datentypen mitteilen
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(config, loginName, host, id);
 };
 
@@ -42,12 +44,25 @@ int main(int argc, char** argv) {
     }
 
     nlohmann::json FileToJson{};
+    /*
     config myConfig{};
-
+    std::cout << myConfig.loginName << ", " << myConfig.host << ", " << myConfig.id << "\n";
+    */
     file >> FileToJson;
-    myConfig = FileToJson.get<config>();
+    config myConfig{ FileToJson.get<config>()};
     std::cout << myConfig.loginName << ", " << myConfig.host << ", " << myConfig.id << "\n";
     std::cout << FileToJson.dump() << "\n";
+
+    std::ofstream saveFile{"alloweduser.json"};
+    if(!file.is_open()){
+        std::cerr << "Error opening file!\n";
+        std::exit(1);
+    }
+    config user2{"Heinrich", "AwesomeHost", 6};
+    nlohmann::json user2json{user2};
+    saveFile << FileToJson.dump();
+    saveFile << user2json;
+
 
     return 0;
 }
