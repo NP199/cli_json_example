@@ -10,9 +10,10 @@ struct config{
     : loginName{loginName_temp}, host{host_temp}, id{id_temp}{
         std::cout << "new config constructed!\n";
     }
+    config() = default;
     std::string loginName{"Name"};
     std::string host{"Host"};
-    std::uint8_t id{};
+    int id{};
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(config, loginName, host, id);
 };
@@ -36,13 +37,16 @@ int main(int argc, char** argv) {
 
     std::ifstream file{filepath};
     if(!file.is_open()){
-        std::cout << "Error opening file!\n";
-        exit(0);
+        std::cerr << "Error opening file!\n";
+        std::exit(1);
     }
 
-    nlohmann::json FileToJson;
-    file >> FileToJson;
+    nlohmann::json FileToJson{};
+    config myConfig{};
 
+    file >> FileToJson;
+    myConfig = FileToJson.get<config>();
+    std::cout << myConfig.loginName << ", " << myConfig.host << ", " << myConfig.id << "\n";
     std::cout << FileToJson.dump() << "\n";
 
     return 0;
