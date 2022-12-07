@@ -14,6 +14,16 @@ if(NOT nlohmann_json_FOUND)
   fetchcontent_makeavailable(nlohmann_json)
 endif()
 
+find_package(fmt QUIET)
+if(NOT fmt_FOUND)
+  fetchcontent_declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG master
+  )
+  fetchcontent_makeavailable(fmt)
+endif()
+
 find_package(CLI11 QUIET)
 if(NOT CLI11_FOUND)
   fetchcontent_declare(
@@ -29,5 +39,6 @@ add_executable(loadConfig src/main.cpp)
 target_link_libraries(
     loadConfig
     CLI11::CLI11
+    #   fmt::fmt
     nlohmann_json::nlohmann_json
     )
