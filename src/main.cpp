@@ -61,7 +61,7 @@ public:
                 }
     }
 
-    void isUserAllowed(std::string loginName_, std::string host_, int id_){
+    void isUserAllowed(std::string const& loginName_, std::string const& host_, int const& id_){
     int counter = 0;
     for(config const& user_ : allowedUser){
                     counter++;
