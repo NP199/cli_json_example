@@ -24,7 +24,7 @@ class accescontrol{
 private:
     std::vector<config> allowedUser;
 public:
-    void addAllowedUser(config user_){
+    void addAllowedUser(config const& user_){
         std::cout << "added user:"  << user_.loginName
                                     << ", "
                                     << user_.host
@@ -35,7 +35,7 @@ public:
     }
 
     void showAllowedUser(){
-        for(config & user_ : allowedUser){
+        for(config const& user_ : allowedUser){
             std::cout   << user_.loginName
                         << ", "
                         << user_.host
@@ -55,7 +55,7 @@ public:
                         std::cout << user_.loginName << ": acces granted!\n";
                         break;
                     }else if(counter == allowedUser.size()){
-                        std::cout << user_.loginName <<": no acces rights!\n";
+                        std::cerr << user_.loginName <<": no acces rights!\n";
                         std::exit(1);
                     }
                 }
@@ -71,7 +71,7 @@ public:
                         std::cout << loginName_ << ", " << host_ <<", " << id_ << ": acces granted!\n";
                         break;
                     }else if(counter == allowedUser.size()){
-                        std::cout << loginName_ << ", " << host_ <<", " << id_ << ": no acces rights!\n";
+                        std::cerr << loginName_ << ", " << host_ <<", " << id_ << ": no acces rights!\n";
                         std::exit(1);
                     }
                 }
@@ -87,7 +87,7 @@ public:
         for(config const& user_ : allowedUser){
             json2file.push_back(user_);
         }
-            saveFile << json2file;
+        saveFile << json2file;
     }
 
     void loadFromFile(std::string const& filepath_){
@@ -130,17 +130,8 @@ int main(int argc, char** argv) {
     }
 
     nlohmann::json FileToJson{};
-    /*
-    config myConfig{};
-    std::cout << myConfig.loginName << ", " << myConfig.host << ", " << myConfig.id << "\n";
-    */
-    /*
-    file >> FileToJson;
-    config myConfig{ FileToJson.get<config>()};
-    std::cout << myConfig.loginName << ", " << myConfig.host << ", " << myConfig.id << "\n";
-    std::cout << FileToJson.dump() << "\n";
-*/
-    accescontrol myAccescontrol;
+
+    accescontrol myAccescontrol{};
 
     config user2{"Heinrich", "AwesomeHost", 2};
     config user3{"Sabine", "AwesomeHost", 3};
